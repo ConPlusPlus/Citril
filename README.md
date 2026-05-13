@@ -5,8 +5,8 @@ It's being worked on as much as possible so if you find a bug you can report it 
 
 It's main idea is:
 
-*Being simple\n
-*Fast\n
-*Compatible with a lot of other things\n
-*Modular\n
-*Can be easily swapped out to be similar to other languages(This will be in the future)\n
+*Being simple <br>
+*Fast <br>
+*Compatible with a lot of other things <br>
+*Modular <br>
+*Can be easily swapped out to be similar to other languages(This will be in the future) <br>
