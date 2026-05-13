@@ -119,3 +119,7 @@ Suggested next steps:
 7. Add C/C++ FFI or LLVM backend later.
 
 The current C++ interpreter is intentionally simple and hackable so contributors can modify it without needing to understand a massive compiler first.
+
+## Dynamic libraries
+
+Citril supports runtime extension libraries via `--lib`. See `docs/LIBRARIES.md`.
