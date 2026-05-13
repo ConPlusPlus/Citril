@@ -1,0 +1,32 @@
+{
+  "name": "citril-language-support",
+  "displayName": "Citril Language Support",
+  "description": "Syntax highlighting and file recognition for Citril (.citril, .ctl, Citrilfile).",
+  "version": "0.1.0",
+  "publisher": "citril",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "citril",
+        "aliases": ["Citril", "citril"],
+        "extensions": [".citril", ".ctl"],
+        "filenames": ["Citrilfile"],
+        "firstLine": "^#!.*\\bcitril\\b",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "citril",
+        "scopeName": "source.citril",
+        "path": "./syntaxes/citril.tmLanguage.json"
+      }
+    ]
+  }
+}

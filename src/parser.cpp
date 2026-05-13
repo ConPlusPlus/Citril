@@ -1,0 +1,34 @@
+#include "citril/parser.hpp"
+#include "citril/error.hpp"
+
+namespace citril {
+Parser::Parser(std::vector<Token> tokens) : tokens_(std::move(tokens)) {}
+std::vector<StmtPtr> Parser::parse(){ std::vector<StmtPtr> s; while(!is_at_end()) s.push_back(declaration()); return s; }
+StmtPtr Parser::declaration(){ if(match({TokenType::Var, TokenType::Let})) return var_declaration(false); if(match({TokenType::LocalVar})) return var_declaration(true); if(match({TokenType::Include})) return include_statement(); return statement(); }
+StmtPtr Parser::var_declaration(bool require_local_scope){ if(require_local_scope && block_depth_==0) throw ParseError("localvar must be declared inside a block"); auto name=consume(TokenType::Identifier,"Expected variable name"); consume(TokenType::Equal,"Expected '='"); auto init=expression(); consume_optional_semicolon(); auto s=std::make_shared<Stmt>(Stmt::Kind::Let); s->token=name; s->initializer=init; return s; }
+StmtPtr Parser::include_statement(){ auto t=consume(TokenType::String,"Expected library name string"); consume_optional_semicolon(); auto s=std::make_shared<Stmt>(Stmt::Kind::Include); auto raw=t.lexeme; s->module_name=raw.substr(1,raw.size()-2); return s; }
+StmtPtr Parser::statement(){ if(match({TokenType::If})) return if_statement(); if(match({TokenType::While})) return while_statement(); if(match({TokenType::LeftBrace})) return block_statement(); return expression_statement(); }
+StmtPtr Parser::if_statement(){ consume(TokenType::LeftParen,"Expected '('"); auto cond=expression(); consume(TokenType::RightParen,"Expected ')'"); auto thenb=statement(); StmtPtr elseb=nullptr; if(match({TokenType::Else})) elseb=statement(); auto s=std::make_shared<Stmt>(Stmt::Kind::If); s->condition=cond; s->then_branch=thenb; s->else_branch=elseb; return s; }
+StmtPtr Parser::while_statement(){ consume(TokenType::LeftParen,"Expected '('"); auto cond=expression(); consume(TokenType::RightParen,"Expected ')'"); auto body=statement(); auto s=std::make_shared<Stmt>(Stmt::Kind::While); s->condition=cond; s->then_branch=body; return s; }
+StmtPtr Parser::block_statement(){ block_depth_++; auto s=std::make_shared<Stmt>(Stmt::Kind::Block); while(!check(TokenType::RightBrace)&&!is_at_end()) s->statements.push_back(declaration()); consume(TokenType::RightBrace,"Expected '}'"); block_depth_--; return s; }
+StmtPtr Parser::expression_statement(){ auto e=expression(); consume_optional_semicolon(); auto s=std::make_shared<Stmt>(Stmt::Kind::Expression); s->expression=e; return s; }
+ExprPtr Parser::expression(){ return assignment(); }
+ExprPtr Parser::assignment(){ auto expr=logic_or(); if(match({TokenType::Equal})){ auto val=assignment(); if(expr->kind==Expr::Kind::Variable){ auto a=std::make_shared<Expr>(Expr::Kind::Assign); a->token=expr->token; a->right=val; return a;} throw ParseError("Invalid assignment"); } return expr; }
+ExprPtr Parser::logic_or(){ auto e=logic_and(); while(match({TokenType::Or})){ auto n=std::make_shared<Expr>(Expr::Kind::Logical); n->token=previous(); n->left=e; n->right=logic_and(); e=n;} return e; }
+ExprPtr Parser::logic_and(){ auto e=equality(); while(match({TokenType::And})){ auto n=std::make_shared<Expr>(Expr::Kind::Logical); n->token=previous(); n->left=e; n->right=equality(); e=n;} return e; }
+ExprPtr Parser::equality(){ auto e=comparison(); while(match({TokenType::BangEqual,TokenType::EqualEqual})){ auto n=std::make_shared<Expr>(Expr::Kind::Binary); n->token=previous(); n->left=e; n->right=comparison(); e=n;} return e; }
+ExprPtr Parser::comparison(){ auto e=term(); while(match({TokenType::Greater,TokenType::GreaterEqual,TokenType::Less,TokenType::LessEqual})){ auto n=std::make_shared<Expr>(Expr::Kind::Binary); n->token=previous(); n->left=e; n->right=term(); e=n;} return e; }
+ExprPtr Parser::term(){ auto e=factor(); while(match({TokenType::Minus,TokenType::Plus})){ auto n=std::make_shared<Expr>(Expr::Kind::Binary); n->token=previous(); n->left=e; n->right=factor(); e=n;} return e; }
+ExprPtr Parser::factor(){ auto e=unary(); while(match({TokenType::Slash,TokenType::Star,TokenType::Percent})){ auto n=std::make_shared<Expr>(Expr::Kind::Binary); n->token=previous(); n->left=e; n->right=unary(); e=n;} return e; }
+ExprPtr Parser::unary(){ if(match({TokenType::Bang,TokenType::Minus})){ auto n=std::make_shared<Expr>(Expr::Kind::Unary); n->token=previous(); n->right=unary(); return n;} return call(); }
+ExprPtr Parser::call(){ auto expr=primary(); while(match({TokenType::LeftParen})){ auto c=std::make_shared<Expr>(Expr::Kind::Call); c->callee=expr; if(!check(TokenType::RightParen)){ do { c->arguments.push_back(expression()); } while(match({TokenType::Comma})); } c->token=consume(TokenType::RightParen,"Expected ')'"); expr=c; } return expr; }
+ExprPtr Parser::primary(){ if(match({TokenType::False})){auto e=std::make_shared<Expr>(Expr::Kind::Literal); e->literal=false; return e;} if(match({TokenType::True})){auto e=std::make_shared<Expr>(Expr::Kind::Literal); e->literal=true; return e;} if(match({TokenType::Nil})){auto e=std::make_shared<Expr>(Expr::Kind::Literal); e->literal=Nil{}; return e;} if(match({TokenType::Number})){auto e=std::make_shared<Expr>(Expr::Kind::Literal); e->literal=std::stod(previous().lexeme); return e;} if(match({TokenType::String})){auto e=std::make_shared<Expr>(Expr::Kind::Literal); auto s=previous().lexeme; e->literal=s.substr(1,s.size()-2); return e;} if(match({TokenType::Identifier})){auto e=std::make_shared<Expr>(Expr::Kind::Variable); e->token=previous(); return e;} if(match({TokenType::LeftParen})){auto e=expression(); consume(TokenType::RightParen,"Expected ')'"); return e;} throw ParseError("Expected expression"); }
+bool Parser::match(std::initializer_list<TokenType> t){ for(auto x:t) if(check(x)){ advance(); return true; } return false; }
+bool Parser::check(TokenType t) const { if(is_at_end()) return false; return peek().type==t; }
+const Token& Parser::advance(){ if(!is_at_end()) current_++; return previous(); }
+bool Parser::is_at_end() const { return peek().type==TokenType::EndOfFile; }
+const Token& Parser::peek() const { return tokens_[current_]; }
+const Token& Parser::previous() const { return tokens_[current_-1]; }
+const Token& Parser::consume(TokenType t,const std::string& m){ if(check(t)) return advance(); throw ParseError(m); }
+void Parser::consume_optional_semicolon(){ if(match({TokenType::Semicolon})) return; }
+}
