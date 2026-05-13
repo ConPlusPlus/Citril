@@ -4,3 +4,8 @@ include "sample_citril_lib"
 var message = "hello"
 print(type(message))
 print(len("dynamic"))
+var message = "hello"
+print(type(message))
+print(len("dynamic"))
+print(type("hello"));
+print(len("dynamic"));

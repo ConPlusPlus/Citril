@@ -19,6 +19,10 @@ private:
     StmtPtr var_declaration(bool require_local_scope);
     StmtPtr statement();
     StmtPtr include_statement();
+
+    StmtPtr declaration();
+    StmtPtr let_declaration();
+    StmtPtr statement();
     StmtPtr if_statement();
     StmtPtr while_statement();
     StmtPtr block_statement();

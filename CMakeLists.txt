@@ -38,6 +38,7 @@ set_target_properties(sample_citril_lib PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libraries
 )
 
+
 add_library(print_citril_lib SHARED
     libraries/print_library.cpp
 )
