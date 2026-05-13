@@ -1,0 +1,14 @@
+include "print"
+
+var x = 0
+while (x < 5) {
+    localvar label = "x = " + x
+    print(label)
+    x = x + 1
+}
+
+if (x == 5) {
+    print("done")
+} else {
+    print("unexpected")
+}
