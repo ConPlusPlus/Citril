@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.citril": "citril",
+    "*.ctl": "citril",
+    "Citrilfile": "citril"
+  }
+}
