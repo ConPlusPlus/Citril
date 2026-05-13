@@ -43,6 +43,10 @@ Both extensions run the same language. Use `.citril` for docs and real projects,
 
 Start with editor support instead of building a custom editor. This repo includes a starter VS Code extension in `editor/vscode/citril-language-support`. It adds syntax highlighting, comments, brackets, and snippets for `.citril` and `.ctl` files.
 
+## Installation
+
+See `docs/INSTALL.md` for macOS and Windows setup instructions.
+
 ## Build
 
 Requires a C++17 compiler and CMake.
