@@ -1,0 +1,3 @@
+var message = "hello"
+print(type(message))
+print(len("dynamic"))

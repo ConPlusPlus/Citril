@@ -18,7 +18,7 @@ enum class TokenType {
     Identifier, String, Number,
 
     // Keywords
-    And, Else, False, Fn, If, Let, Nil, Or, Return, True, While,
+    And, Else, False, Fn, If, Let, LocalVar, Nil, Or, Return, True, Var, While,
 
     EndOfFile
 };
