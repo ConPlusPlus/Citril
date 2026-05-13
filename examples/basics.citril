@@ -1,3 +1,5 @@
+include "print_citril_lib"
+
 var x = 0
 while (x < 5) {
     localvar label = "x = " + x

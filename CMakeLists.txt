@@ -33,6 +33,10 @@ add_library(sample_citril_lib SHARED
     src/sample_library.cpp
 )
 target_link_libraries(sample_citril_lib PRIVATE citril_core)
+set_target_properties(sample_citril_lib PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libraries
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/libraries
+)
 
 
 add_library(print_citril_lib SHARED

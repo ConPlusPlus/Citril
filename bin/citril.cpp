@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 
+namespace {
 #if defined(_WIN32)
 #include <windows.h>
 #else
@@ -24,6 +25,8 @@ bool is_dynamic_library_file(const std::filesystem::path& path) {
     return path.extension() == ".so";
 #endif
 }
+}
+
 
 void load_library(citril::Interpreter& interpreter, const std::string& path) {
 #if defined(_WIN32)
@@ -77,6 +80,12 @@ int main(int argc, char** argv){
 
     try {
         citril::Interpreter interpreter;
+        if (std::filesystem::exists("libraries")) {
+            for (const auto& entry : std::filesystem::directory_iterator("libraries")) {
+                if (entry.is_regular_file() && is_dynamic_library_file(entry.path())) interpreter.load_library_path(entry.path().string());
+            }
+        }
+        for (const auto& lib : libs) interpreter.load_library_path(lib);
         load_libraries_from_folder(interpreter, "libraries");
         for (const auto& lib : libs) load_library(interpreter, lib);
 

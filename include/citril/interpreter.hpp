@@ -31,6 +31,8 @@ public:
     void interpret(const std::vector<StmtPtr>& statements);
 
     void register_native(const std::string& name, int arity, NativeFunction::NativeImpl impl);
+    void load_library_path(const std::string& path);
+    void load_library_name(const std::string& name);
 
 private:
     std::shared_ptr<Environment> globals_;

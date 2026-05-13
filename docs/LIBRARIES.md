@@ -61,6 +61,18 @@ interpreter.register_native("name", arity, [](const std::vector<citril::Value>& 
 
 - `libraries/print_library.cpp` → registers `print(value)`
 - `src/sample_library.cpp` → registers `len(value)` and `type(value)`
+
+
+## Language include statement
+
+You can load a library from code:
+
+```citril
+include "print_citril_lib"
+include "sample_citril_lib"
+```
+
+This resolves to files in `libraries/` (for example `libraries/libprint_citril_lib.so` on Linux).
 ## Starter example
 
 See `src/sample_library.cpp` for a library that adds:

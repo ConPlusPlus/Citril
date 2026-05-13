@@ -24,7 +24,7 @@ struct Expr {
 };
 
 struct Stmt {
-    enum class Kind { Expression, Let, Block, If, While, Function, Return } kind;
+    enum class Kind { Expression, Let, Block, If, While, Include, Function, Return } kind;
     Token token;
     ExprPtr expression;
     ExprPtr initializer;
@@ -33,6 +33,7 @@ struct Stmt {
     StmtPtr else_branch;
     std::vector<StmtPtr> statements;
     std::vector<Token> params;
+    std::string module_name;
 
     explicit Stmt(Kind kind) : kind(kind) {}
 };
