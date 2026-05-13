@@ -1,11 +1,14 @@
 #pragma once
 #include "citril/ast.hpp"
 #include "citril/environment.hpp"
+#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace citril {
+
+class Interpreter;
 
 class NativeFunction : public Callable {
 public:
