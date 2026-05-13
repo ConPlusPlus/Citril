@@ -13,6 +13,7 @@ int NativeFunction::arity() const { return arity_; }
 std::string NativeFunction::name() const { return name_; }
 Value NativeFunction::call(Interpreter&, const std::vector<Value>& args) { return impl_(args); }
 
+Interpreter::Interpreter() : globals_(std::make_shared<Environment>()), environment_(globals_) {}
 Interpreter::Interpreter() : globals_(std::make_shared<Environment>()), environment_(globals_) {
     register_native("print", 1, [](const std::vector<Value>& args) {
         std::cout << stringify(args[0]) << "\n";

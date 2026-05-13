@@ -123,3 +123,11 @@ The current C++ interpreter is intentionally simple and hackable so contributors
 ## Dynamic libraries
 
 Citril supports runtime extension libraries via `--lib`. See `docs/LIBRARIES.md`.
+
+
+## Core syntax style
+
+- Use `var` for normal variables.
+- Use `localvar` for variables declared inside blocks.
+- Semicolons are optional.
+- `print` is provided by libraries (auto-loaded from `libraries/`).

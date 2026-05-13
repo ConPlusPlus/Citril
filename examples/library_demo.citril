@@ -1,2 +1,5 @@
+var message = "hello"
+print(type(message))
+print(len("dynamic"))
 print(type("hello"));
 print(len("dynamic"));

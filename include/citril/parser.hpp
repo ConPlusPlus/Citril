@@ -13,6 +13,10 @@ public:
 private:
     std::vector<Token> tokens_;
     std::size_t current_ = 0;
+    int block_depth_ = 0;
+
+    StmtPtr declaration();
+    StmtPtr var_declaration(bool require_local_scope);
 
     StmtPtr declaration();
     StmtPtr let_declaration();
@@ -41,6 +45,7 @@ private:
     const Token& peek() const;
     const Token& previous() const;
     const Token& consume(TokenType type, const std::string& message);
+    void consume_optional_semicolon();
 };
 
 } // namespace citril
