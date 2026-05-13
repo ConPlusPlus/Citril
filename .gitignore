@@ -1,0 +1,12 @@
+build/
+.vscode/.browse.VC.db*
+.DS_Store
+__MACOSX/
+*.o
+*.obj
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.lib
