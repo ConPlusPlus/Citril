@@ -3,7 +3,8 @@ Citril is a programming language specifically designed to fit my needs for what 
 
 It's being worked on as much as possible so if you find a bug you can report it to me or fix it(pleaaase)
 
-It's main idea is:
+-It's main idea is:
+-
 
 *Being simple <br>
 *Fast <br>
