@@ -48,10 +48,6 @@ It recognizes `.citril`, `.ctl`, `Citrilfile`, and shebang lines containing `cit
 
 See `docs/INSTALL.md` for macOS and Windows setup instructions.
 
-## Installation
-
-See `docs/INSTALL.md` for macOS and Windows setup instructions.
-
 ## Build
 
 Requires a C++17 compiler and CMake.
