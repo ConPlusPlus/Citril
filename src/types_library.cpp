@@ -1,6 +1,8 @@
 #include "citril/interpreter.hpp"
 #include "citril/value.hpp"
 
+// Library: types_library
+// Called when Citril loads this library.
 extern "C" void register_citril_library(citril::Interpreter& interpreter) {
     interpreter.register_native("type", 1, [](const std::vector<citril::Value>& args) -> citril::Value {
         if (std::holds_alternative<citril::Nil>(args[0])) return std::string("nil");

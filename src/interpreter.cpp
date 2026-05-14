@@ -47,12 +47,27 @@ void Interpreter::load_library_path(const std::string& path) {
 }
 
 void Interpreter::load_library_name(const std::string& name) {
+    std::string normalized = name;
+    if (normalized.size() < 3 || normalized.substr(normalized.size() - 3) != "Lib") normalized += "Lib";
     std::vector<std::filesystem::path> candidates;
     auto add_candidate = [&](const std::string& filename) {
         candidates.push_back(std::filesystem::path("libraries") / filename);
         candidates.push_back(std::filesystem::path("..") / "libraries" / filename);
     };
 #if defined(_WIN32)
+    add_candidate(normalized + ".dll");
+#elif defined(__APPLE__)
+    add_candidate(normalized + ".dylib");
+    add_candidate("lib" + normalized + ".dylib");
+#else
+    add_candidate(normalized + ".so");
+    add_candidate("lib" + normalized + ".so");
+#endif
+    for (const auto& c : candidates) { if (std::filesystem::exists(c)) { load_library_path(c.string()); return; } }
+    throw RuntimeError("Could not find library: " + normalized);
+}
+
+void Interpreter::interpret(const std::vector<StmtPtr>& statements) { for (const auto& s : statements) execute(s); }
     add_candidate(name + ".dll");
 #elif defined(__APPLE__)
     add_candidate(name + ".dylib");

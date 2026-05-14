@@ -23,6 +23,12 @@ target_compile_options(citril_core PRIVATE
 add_executable(citril bin/citril.cpp)
 target_link_libraries(citril PRIVATE citril_core)
 
+function(add_citril_library base_name source_file)
+    set(lib_name "${base_name}Lib")
+    add_library(${lib_name} SHARED ${source_file})
+    target_link_libraries(${lib_name} PRIVATE citril_core)
+    set_target_properties(${lib_name} PROPERTIES
+        OUTPUT_NAME ${lib_name}
 function(add_citril_library target source_file)
     add_library(${target} SHARED ${source_file})
     target_link_libraries(${target} PRIVATE citril_core)
