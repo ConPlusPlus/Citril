@@ -2,9 +2,20 @@ include "printLib"
 include "typesLib"
 include "stringsLib"
 include "timeLib"
+include "print"
+include "types"
+include "strings"
+include "time"
+include "print_citril_lib"
+include "sample_citril_lib"
 
 var message = "hello"
 print(type(message))
 print(len("dynamic"))
 print(upper("citril"))
 print(clock())
+var message = "hello"
+print(type(message))
+print(len("dynamic"))
+print(type("hello"));
+print(len("dynamic"));
