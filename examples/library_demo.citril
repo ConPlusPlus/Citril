@@ -1,0 +1,10 @@
+include "printLib"
+include "typesLib"
+include "stringsLib"
+include "timeLib"
+
+var message = "hello"
+print(type(message))
+print(len("dynamic"))
+print(upper("citril"))
+print(clock())

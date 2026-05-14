@@ -41,7 +41,12 @@ Both extensions run the same language. Use `.citril` for docs and real projects,
 
 ## Editor support
 
-Start with editor support instead of building a custom editor. This repo includes a starter VS Code extension in `editor/vscode/citril-language-support`. It adds syntax highlighting, comments, brackets, and snippets for `.citril` and `.ctl` files.
+A starter VS Code extension is available at `editor/vscode/citril-language-support`.
+It recognizes `.citril`, `.ctl`, `Citrilfile`, and shebang lines containing `citril`.
+
+## Installation
+
+See `docs/INSTALL.md` for macOS and Windows setup instructions.
 
 ## Build
 
@@ -114,3 +119,15 @@ Suggested next steps:
 7. Add C/C++ FFI or LLVM backend later.
 
 The current C++ interpreter is intentionally simple and hackable so contributors can modify it without needing to understand a massive compiler first.
+
+## Dynamic libraries
+
+Citril supports runtime extension libraries via `--lib`. See `docs/LIBRARIES.md`.
+
+
+## Core syntax style
+
+- Use `var` for normal variables.
+- Use `localvar` for variables declared inside blocks.
+- Semicolons are optional.
+- `print` is provided by libraries (auto-loaded from `libraries/`).
